@@ -1,3 +1,5 @@
 numpy 
 datetime
 pandas
+fastapi
+uvicorn
