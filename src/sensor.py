@@ -49,8 +49,6 @@ class Sensor:
 
 
 
-
-
 if __name__ == "__main__":
     if len(sys.argv) > 1:
         year, month, day, hour = [int(v) for v in sys.argv[1].split("-")]

@@ -1,7 +1,7 @@
 import sys
 import os
 from datetime import date, datetime
-#import requests
+import requests
 
 
 #if __name__ == "_main__":
@@ -39,9 +39,30 @@ def query_api(year,month,day,hour):
         response.raise_for_status() # Raise an HTTPError for bad responses (4xx and 5xx)
         print("API response:", response.json())
 
+        save_data(year, month, day, hour, response.json())
+
     except requests.exceptions.RequestException as e:
         print(f"An error occurred while querying the API: {e}")
-    
+
+def save_data(year, month, day, hour, visit_count):
+
+    try:
+        folder_path = "data/raw/"
+        if os.path.exists(folder_path):
+            print("ok")
+        else:
+            os.mkdir(folder_path)
+
+        file_path = os.path.join(folder_path, f"{year}-{month}-{day}-{hour}.csv")
+        df = pd.DataFrame(
+            values=[datetime(year, month, day), hour, visit_count, None],
+            columns=['date', 'hour', 'visit_count','id_capteur']
+            )
+        df.to_csv(file_path, index=False)
+    except Exception as e:
+        raise e
+
+
 if __name__ == "__main__":
     if len(sys.argv) != 2:
         print("Usage: python script.py YYYY-MM-DD-HH")
